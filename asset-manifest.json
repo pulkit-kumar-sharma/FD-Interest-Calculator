@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/FD-Interest-Calculator/static/css/main.073c9b0a.css",
+    "main.js": "/FD-Interest-Calculator/static/js/main.dc312360.js",
+    "static/js/787.8b197a7a.chunk.js": "/FD-Interest-Calculator/static/js/787.8b197a7a.chunk.js",
+    "static/media/logo.svg": "/FD-Interest-Calculator/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/FD-Interest-Calculator/index.html",
+    "main.073c9b0a.css.map": "/FD-Interest-Calculator/static/css/main.073c9b0a.css.map",
+    "main.dc312360.js.map": "/FD-Interest-Calculator/static/js/main.dc312360.js.map",
+    "787.8b197a7a.chunk.js.map": "/FD-Interest-Calculator/static/js/787.8b197a7a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.dc312360.js"
+  ]
+}
