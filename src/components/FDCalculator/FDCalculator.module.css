@@ -5,3 +5,8 @@
     display: grid;
     justify-content: center;
 }
+
+#formbutton{
+    min-width: 100%;
+    margin-bottom: 2%;
+}
