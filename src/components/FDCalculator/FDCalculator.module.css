@@ -1,12 +1,19 @@
 .FDCalculator {}
 
-.fdform{
-    background-color: aqua;
-    display: grid;
+#fdform{
+    text-align: center;
     justify-content: center;
+}
+
+#fdformcontrol{
+    text-align: center;
 }
 
 #formbutton{
     min-width: 100%;
     margin-bottom: 2%;
+}
+
+#inputGroupText{
+    justify-content: center;
 }

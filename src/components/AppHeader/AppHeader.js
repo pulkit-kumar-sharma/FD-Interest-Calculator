@@ -4,7 +4,7 @@ import styles from './AppHeader.module.css';
 
 const AppHeader = () => (
   <div className={styles.AppHeader}>
-    <h1>Fixed Deposite Calculator</h1>
+    <h1><b>Fixed Deposite Calculator</b></h1>
   </div>
 );
 

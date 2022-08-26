@@ -316,11 +316,11 @@ const FDCalculator = () => {
   return (
     <div className={styles.FDCalculator}>
       <Container>
-        <Form className='fdform' onSubmit={handleSubmit}>
+        <Form id={styles["fdform"]} onSubmit={handleSubmit}>
           <Form.Group className="mb-3">          
             <InputGroup className="mb-3">
               <InputGroup.Text>Total Amount</InputGroup.Text>
-                <Form.Control size="lg" type="number" required="required" ref={amount} autoComplete='off' />           
+                <Form.Control id={styles["fdformcontrol"]} size="lg" type="number" onChange={handleReset} required="required" ref={amount} autoComplete='off' />           
               <InputGroup.Text>₹</InputGroup.Text>
             </InputGroup>          
           </Form.Group>
@@ -328,7 +328,7 @@ const FDCalculator = () => {
           <Form.Group className="mb-3"> 
             <InputGroup className="mb-3">
               <InputGroup.Text>Rate of Interest</InputGroup.Text>
-                <Form.Control size="lg" type="float" required="required" ref={roi} min={0} max={15} autoComplete='off' />
+                <Form.Control id={styles["fdformcontrol"]} size="lg" type="float" onChange={handleReset} required="required" ref={roi} min={0} max={15} autoComplete='off' />
               <InputGroup.Text>% Per Annum</InputGroup.Text>
             </InputGroup> 
           </Form.Group>
@@ -336,34 +336,43 @@ const FDCalculator = () => {
             <InputGroup className="mb-3">
               <InputGroup.Text>Type of Deposit</InputGroup.Text>
               <InputGroup.Text onClick={e => (setTypeOfDeposit("Reinvestment"))}>
-                <Form.Check inline label="Reinvestment" defaultChecked name="typeOfDeposit" type='radio'/>
+                <Form.Check inline label="Reinvestment" onChange={handleReset} defaultChecked name="typeOfDeposit" type='radio'/>
               </InputGroup.Text>
               <InputGroup.Text onClick={e => (setTypeOfDeposit("QuarterlyPayout"))}>
-                <Form.Check inline label="Quarterly Payout" name="typeOfDeposit" type='radio'/>
+                <Form.Check inline label="Quarterly Payout" onChange={handleReset} name="typeOfDeposit" type='radio'/>
               </InputGroup.Text>
               <InputGroup.Text onClick={e => (setTypeOfDeposit("MonthlyPayout"))}>
-                <Form.Check inline label="Monthly Payout" name="typeOfDeposit" type='radio'/>
+                <Form.Check inline label="Monthly Payout" onChange={handleReset} name="typeOfDeposit" type='radio'/>
               </InputGroup.Text>
               <InputGroup.Text onClick={e => (setTypeOfDeposit("ShortTerm"))}>
-                <Form.Check inline label="Short Term" name="typeOfDeposit" type='radio'/>
+                <Form.Check inline label="Short Term" onChange={handleReset} name="typeOfDeposit" type='radio'/>
               </InputGroup.Text>
             </InputGroup> 
           </Form.Group>
           <Form.Group className="mb-3">
+            <Row>
+              
             <InputGroup className="mb-3">
-              <InputGroup.Text>Time Period</InputGroup.Text>
-                <Form.Control size="lg" type="number" defaultValue={0} ref={years} min={0} max={10} autoComplete='off' />
-                  <InputGroup.Text>Years</InputGroup.Text>
-                <Form.Control size="lg" type="number" defaultValue={0} ref={months} min={0} max={11} autoComplete='off' />
-                  <InputGroup.Text>Months</InputGroup.Text>
-                <Form.Control size="lg" type="number" defaultValue={0} ref={days} min={0} max={31} autoComplete='off' />
-                  <InputGroup.Text>Days</InputGroup.Text>
+            <InputGroup.Text id={styles["inputGroupText"]}>Time Period</InputGroup.Text>
+              <Col>
+                <Form.Control id={styles["fdformcontrol"]} size="lg" type="number" onChange={handleReset} defaultValue={0} ref={years} min={0} max={10} autoComplete='off' />
+                <InputGroup.Text id={styles["inputGroupText"]}>Years</InputGroup.Text>
+              </Col>  
+              <Col>
+                <Form.Control id={styles["fdformcontrol"]} size="lg" type="number" onChange={handleReset} defaultValue={0} ref={months} min={0} max={11} autoComplete='off' />
+                <InputGroup.Text id={styles["inputGroupText"]}>Months</InputGroup.Text>
+              </Col> 
+              <Col>
+                <Form.Control id={styles["fdformcontrol"]} size="lg" type="number" onChange={handleReset} defaultValue={0} ref={days} min={0} max={31} autoComplete='off' />
+                <InputGroup.Text id={styles["inputGroupText"]}>Days</InputGroup.Text>
+              </Col>
             </InputGroup>
+            </Row>
           </Form.Group>
           <Form.Group className="mb-3">
             <InputGroup className="mb-3">
               <InputGroup.Text>Date of Deposit</InputGroup.Text>
-              <Form.Control type="date" ref={dod} required placeholder="Date of Deposit" autoComplete='off' />
+              <Form.Control id={styles["fdformcontrol"]} type="date" ref={dod} onChange={handleReset} required placeholder="Date of Deposit" autoComplete='off' />
             </InputGroup>
           </Form.Group>
           <Row>
