@@ -85,9 +85,15 @@ const FDCalculator = () => {
       return nextJanQ;
   }
 
-  function calculateNextInterestDepositDate(date){
+  function calculateNextInterestDepositDateForReinvestment(date){
     const idate = new Date(date);
     idate.setMonth(idate.getMonth()+3);
+    return idate;
+  }
+
+  function calculateNextInterestDepositDateForMonthlyPayout(date){
+    const idate = new Date(date);
+    idate.setMonth(idate.getMonth()+1);
     return idate;
   }
 
@@ -185,7 +191,7 @@ const FDCalculator = () => {
         let perDayInterest = (currentAmount * xroi * 0.01)/(isLeapYear(currentYear)?366:365);
         // console.log("Per Day Interest : " + perDayInterest);
         let interestCalculationDate = calculateMonthEndDate(currentDate);
-        let interestDepositDate = calculateNextInterestDepositDate(lastInterestDepositDate);
+        let interestDepositDate = calculateNextInterestDepositDateForReinvestment(lastInterestDepositDate);
         if(interestDepositDate > dateOfMaturity){
           interestDepositDate = dateOfMaturity;
         }
@@ -242,6 +248,78 @@ const FDCalculator = () => {
 
       // console.log(output);
     }
+    else if(typeOfDeposit === 'MonthlyPayout'){
+      let currentDate = new Date(xdod);
+      let lastInterestDepositDate = currentDate;
+      let currentAmount = parseFloat(xamount);
+
+      let counter = 1;
+
+      let interestTableEntry = {
+        sno : counter,
+        date : currentDate.toDateString(),
+        interestAmount : 0,
+        interestCapitalized : 0,
+        totalAmount : currentAmount
+      }
+      interestTable.push(interestTableEntry);
+      setInterestTable(interestTable);
+
+      let interestAccumulatedButNotCredited = parseFloat(0);
+      let daysleft = 0;
+      let totalInterest = parseFloat(0);
+
+      while(currentDate < dateOfMaturity){
+        counter++;
+        let currentYear = currentDate.getFullYear();
+        let yearlyInterest = currentAmount * xroi * 0.01;
+        let perDayInterest = (currentAmount * xroi * 0.01)/(isLeapYear(currentYear)?366:365);
+        let interestCalculationDate = calculateMonthEndDate(currentDate);
+        let interestDepositDate = calculateNextInterestDepositDateForMonthlyPayout(lastInterestDepositDate);
+        if(interestDepositDate > dateOfMaturity){
+          interestDepositDate = dateOfMaturity;
+        }
+        let noOfDays = 0;
+        let interestCapitalized = 0;
+        if(interestCalculationDate > interestDepositDate){
+          interestCalculationDate = interestDepositDate;
+        }
+        noOfDays = daysleft + Math.ceil(Math.abs(interestCalculationDate - currentDate + 1)/(1000 * 60 * 60 * 24));
+        daysleft = 0;
+        if(interestCalculationDate === interestDepositDate){
+          noOfDays = Math.ceil(Math.abs(interestCalculationDate - currentDate)/(1000 * 60 * 60 * 24));
+          daysleft = 1;
+        }
+        if(interestCalculationDate === dateOfMaturity){
+          noOfDays += daysleft;
+          daysleft = 0;
+        }
+        let interest = noOfDays * perDayInterest;
+        totalInterest = parseFloat(totalInterest) + parseFloat(interest);
+        interest = interest.toFixed(2);
+        totalInterest = totalInterest.toFixed(0);
+        
+        interestAccumulatedButNotCredited += parseFloat(interest);
+        if(interestCalculationDate === interestDepositDate){
+          interestCapitalized = interestAccumulatedButNotCredited.toFixed(0);
+          lastInterestDepositDate = interestDepositDate;
+          interestAccumulatedButNotCredited = 0;
+        }
+        let interestTableEntry = {
+          sno : counter,
+          date : interestCalculationDate.toDateString(),
+          interestAmount : interest,
+          interestCapitalized : interestCapitalized,
+          totalAmount : currentAmount.toFixed(0)
+        }
+        interestTable.push(interestTableEntry);
+        setInterestTable(interestTable);
+        currentDate = getNextDate(interestCalculationDate);
+      }
+      output.totalAmount = currentAmount;
+      output.interestAmount = totalInterest;
+      output.investedAmount = xamount;
+    }
     return output;
   }
 
@@ -266,7 +344,7 @@ const FDCalculator = () => {
       <Row>
         <Col>
           <InputGroup className="mb-3">
-            <InputGroup.Text>Total Amount</InputGroup.Text>
+            <InputGroup.Text>Maturity Amount</InputGroup.Text>
               <Form.Control size="lg" type="number" disabled value={totalAmount} />
             <InputGroup.Text>₹</InputGroup.Text>
           </InputGroup>
@@ -339,13 +417,13 @@ const FDCalculator = () => {
                 <Form.Check inline label="Reinvestment" onChange={handleReset} defaultChecked name="typeOfDeposit" type='radio'/>
               </InputGroup.Text>
               <InputGroup.Text onClick={e => (setTypeOfDeposit("QuarterlyPayout"))}>
-                <Form.Check inline label="Quarterly Payout" onChange={handleReset} name="typeOfDeposit" type='radio'/>
+                <Form.Check inline label="Quarterly Payout" onChange={handleReset} name="typeOfDeposit" type='radio' disabled/>
               </InputGroup.Text>
               <InputGroup.Text onClick={e => (setTypeOfDeposit("MonthlyPayout"))}>
                 <Form.Check inline label="Monthly Payout" onChange={handleReset} name="typeOfDeposit" type='radio'/>
               </InputGroup.Text>
               <InputGroup.Text onClick={e => (setTypeOfDeposit("ShortTerm"))}>
-                <Form.Check inline label="Short Term" onChange={handleReset} name="typeOfDeposit" type='radio'/>
+                <Form.Check inline label="Short Term" onChange={handleReset} name="typeOfDeposit" type='radio' disabled/>
               </InputGroup.Text>
             </InputGroup> 
           </Form.Group>
